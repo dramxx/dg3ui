@@ -1,0 +1,15 @@
+---
+# MYMI-GUI - 02_install.yml
+
+- name: MYMI-GUI | Run PM2 server.
+  block:
+    - shell: "pm2 start {{ mymi_gui_deploy_path }}process-prod.json"
+      args:
+        warn: no
+      register: gui_start
+      # TODO: Implement some Ansible fact instead
+      changed_when: ( gui_start.rc not in [ 0, 1 ] )
+    - debug:
+        msg: "GUI is up & running, check http://{{ ansible_default_ipv4.address }}:{{ mymi_gui_server_port }}"
+        verbosity: 0
+      when: ( gui_start.rc in [ 0, 1 ] )

@@ -1,0 +1,7 @@
+---
+
+- name: Ansible role UI | Run role.
+  hosts: ansible_role_ui_hosts
+  become: yes
+  roles:
+    - role: ansible-role-ui

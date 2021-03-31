@@ -1,0 +1,16 @@
+---
+# MYMI-INVENTORY - 03_post_install.yml
+
+- name: Set Firewall rules.
+  block:
+    - name: Check state of firewalld.
+      service_facts:
+      register: fw_service
+    - name: Add Firewall rules for port "{{ mymi_gui_server_port }}" and protocol tcp.
+      command: firewall-cmd  --add-port="{{ mymi_gui_server_port }}"/tcp --zone=public  --permanent
+      notify: FIREWALL | restart service.
+      when: mymi_gui_set_firewall | bool == true and fw_service.ansible_facts.services["firewalld.service"].state == 'running'
+  when: "'ansible_role_ui_hosts' in group_names"
+
+- name: MYMI-INVENTORY  | flush handlers.
+  meta: flush_handlers

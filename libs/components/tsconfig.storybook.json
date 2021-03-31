@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["jest", "node"]
+  },
+  "include": [
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    "**/*.stories.js",
+    "**/*.stories.jsx"
+  ],
+  "exclude": ["node_modules", "tmp", "**/*.spec.ts", "**/*.spec.tsx"]
+}

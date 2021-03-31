@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "server",
+      "cwd": "/usr/src/dist/server",
+      "script": "main.js",
+      "watch": false,
+      "env": {
+          "NODE_ENV": "production",
+      }
+    }
+  ]
+}

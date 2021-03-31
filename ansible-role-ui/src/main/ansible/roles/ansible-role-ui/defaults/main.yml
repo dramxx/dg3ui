@@ -1,0 +1,16 @@
+---
+mymi_gui_name: mymi-gui
+mymi_gui_group: mymi
+mymi_gui_user: mymi-gui
+
+mymi_gui_build_path: "../../../../../../../dist"
+mymi_gui_deploy_path: "/opt/{{ mymi_gui_name }}/"
+mymi_gui_server_port: 4000
+
+mymi_gui_set_firewall: false
+
+mymi_gui_sso_enabled: false
+mymi_gui_graphql_hostname: 172.22.16.186
+mymi_gui_graphql_hostname_port: 8083
+mymi_gui_graphql_protocol: http
+mymi_gui_graphql_url: "{{ mymi_gui_graphql_protocol }}://{{ mymi_gui_graphql_hostname }}:{{ mymi_gui_graphql_hostname_port }}/graphql"

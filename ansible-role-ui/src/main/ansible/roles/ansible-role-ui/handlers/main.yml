@@ -1,0 +1,4 @@
+---
+
+- name: FIREWALL | restart service.
+  command: firewall-cmd --reload

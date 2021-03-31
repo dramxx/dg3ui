@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "types": []
+  },
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx"
+  ],
+  "include": ["**/*.ts", "**/*.tsx"]
+}

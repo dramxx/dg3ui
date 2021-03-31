@@ -1,0 +1,48 @@
+{
+  "name": "@dg3/monorepo",
+  "version": "1.0.0",
+  "description": "DataGenie 3. Generation monorepo.",
+  "author": "Jiri Pavlik <jiri.pavlik@mycroftmind.com>",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "nx": "nx",
+    "start": "nx serve",
+    "build": "nx build",
+    "build:packages": "yarn workspaces run babel --verbose --root-mode upward src -d lib",
+    "test": "nx test",
+    "lint": "nx workspace-lint && nx lint",
+    "e2e": "nx e2e",
+    "affected:apps": "nx affected:apps",
+    "affected:libs": "nx affected:libs",
+    "affected:build": "nx affected:build",
+    "affected:e2e": "nx affected:e2e",
+    "affected:test": "nx affected:test",
+    "affected:lint": "nx affected:lint",
+    "affected:dep-graph": "nx affected:dep-graph",
+    "affected": "nx affected",
+    "format": "nx format:write",
+    "format:write": "nx format:write",
+    "format:check": "nx format:check",
+    "workspace-schematic": "nx workspace-schematic",
+    "dep-graph": "nx dep-graph",
+    "help": "nx help"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@babel/cli": "7.6.0",
+    "@babel/core": "7.6.0",
+    "@babel/plugin-proposal-class-properties": "7.5.5",
+    "@babel/plugin-transform-modules-commonjs": "7.6.0",
+    "@babel/preset-env": "7.6.0",
+    "eslint": "6.4.0",
+    "eslint-config-standard": "14.1.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-node": "10.0.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-react": "7.14.3",
+    "eslint-plugin-standard": "4.0.1"
+  }
+}

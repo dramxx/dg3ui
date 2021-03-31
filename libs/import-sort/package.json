@@ -1,0 +1,9 @@
+{
+  "name": "import-sort-style-dg3",
+  "version": "0.0.1",
+  "description": "Import sort style for DG3",
+  "main": "src/index.js",
+  "author": "Tomas Vejpustek <tomas.vejpustek@mycroftmind.com>",
+  "license": "UNLICENSED",
+  "private": true
+}

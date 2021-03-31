@@ -1,0 +1,59 @@
+---
+# mymi-gui - 01_pre_install.yml
+
+- name: MYMI-GUI | Crate app users and groups.
+  block:
+    - group:
+        name: "{{ mymi_gui_group }}"
+        state: present
+    - user:
+        name: "{{ mymi_gui_user }}"
+        system: true
+        group: "{{ mymi_gui_group }}"
+        state: present
+
+- name: MYMI-GUI | Creates app directories.
+  file:
+    state: directory
+    path: "{{ item }}"
+    recurse: yes
+  loop:
+    - "{{ mymi_gui_deploy_path }}"
+    - "/var/log/{{ mymi_gui_name }}/"
+
+- name: MYMI-INVENTORY | Upload instalation files.
+  # TODO: Improve synchronize changed_when handling
+  block:
+    - synchronize:
+        src: "{{ mymi_gui_build_path }}"
+        dest: "{{ mymi_gui_deploy_path }}"
+      changed_when: false
+    - template:
+        src: "process-prod.json.j2"
+        dest: "{{ mymi_gui_deploy_path }}process-prod.json"
+    - template:
+        src: ".env.j2"
+        dest: "{{ mymi_gui_deploy_path }}dist/.env"
+      notify:
+#        - MYMI-INVENTORY | restart service.
+#        - MYMI-INVENTORY | verify service.
+
+- name: MYMI-GUI | Install NodeJS global packages.
+  block:
+    - npm:
+        name: pm2
+        global: yes
+
+- name: MYMI-GUI | Set app folder rights.
+  file:
+    path: "{{ item }}"
+    owner: "{{ mymi_gui_user }}"
+    group: "{{ mymi_gui_group }}"
+    mode: 775
+    recurse: yes
+  loop:
+    - "{{ mymi_gui_deploy_path }}/"
+    - "/var/log/{{ mymi_gui_name }}/"
+  changed_when: false
+  tags:
+    - permissions

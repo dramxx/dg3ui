@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "types": ["node", "jest"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

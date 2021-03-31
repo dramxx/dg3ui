@@ -1,0 +1,11 @@
+{
+  "migrations": [
+    {
+      "version": "8.7.0",
+      "description": "Update Jest testPathPattern option",
+      "factory": "./src/migrations/update-8-7-0/update-8-7-0",
+      "package": "@nrwl/jest",
+      "name": "update-8.7.0"
+    }
+  ]
+}

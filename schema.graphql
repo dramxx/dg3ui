@@ -1,0 +1,953 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+  query: Query
+}
+
+"Set at least 1 aggregation."
+type Aggregations {
+  avg: Float
+  groupByAuthorKind: [Bucket!]
+  groupByObjectDeviceKind: [Bucket!]
+  groupByObjectPlaceKind: [Bucket!]
+  """
+
+  Certainity is expressed in percentage.
+  Range argument is a span size for indivdual buckets.
+  E.g.: range = 50
+  will generates tow buckets: <0:50) and <50:100>
+  """
+  groupByValueCertainty(range: Int!): [RangeBucket!]
+  histogramByTimestamp(time: TimeUnit!): [Bucket!]
+  max: Float
+  min: Float
+  sum: Float
+}
+
+type Attribute {
+  did: String!
+  value: String
+}
+
+type Bucket {
+  count: Int!
+  diosSet: DiosSet!
+  key: String!
+}
+
+type Channel {
+  attrs(dids: [String!]!): [Attribute!]!
+  intId: String!
+}
+
+type Device {
+  attr(did: String!): Attribute
+  attrs(dids: [String!]): [Attribute!]!
+  "get DiosSet where this Device is Author"
+  diosAuthor(filter: AuthorDioFilter, time: TimeDelimitation): DiosSet
+  "get DiosSet where this Device is Mediator"
+  diosMediator(filter: MediatorDioFilter, time: TimeDelimitation): DiosSet
+  "get DiosSet where this Device is Object"
+  diosObject(filter: ObjectDioFilter, time: TimeDelimitation): DiosSet
+  edgeChannel(filter: String = "TODO"): [EdgeChannel!]!
+  edgeDevice(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation): [EdgeDevice!]!
+  edgePlace(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [PlaceRelationOrder!], page: PageDelimitation): [EdgePlace!]!
+  id: ExtId!
+  intId: ID!
+  kind: DeviceKind!
+  relChannel(filter: String = "TODO"): [Channel!]!
+  """
+
+  All Devices related to selected Device either by selected `edge` or `walk`.
+  Exactly one of `edge` or `walk` must be given.
+  Returned devices are reachable either by the `edge` or `walk` and satisfy given filter.
+  """
+  relDevice(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation, walk: WalkMatcher): [Device!]!
+  relDevicesSet(edge: EdgeMatcher, filter: InstancesSetPatternMatcher, walk: WalkMatcher): DevicesSet!
+  relPlace(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [PlaceRelationOrder!], page: PageDelimitation, walk: WalkMatcher): [Place!]!
+  relPlacesSet(edge: EdgeMatcher, filter: InstancesSetPatternMatcher, walk: WalkMatcher): PlacesSet!
+  template: DeviceTemplate!
+  templateHistory(page: PageDelimitation, validAfter: Date, validAt: Date, validBefore: Date): [EdgeDeviceTemplate!]!
+  walkChannel(filter: String = "TODO"): [EdgeChannel!]!
+  walkDevice(filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation, walk: WalkMatcher!): [WalkDevice!]!
+  walkPlace(filter: InstancePatternMatcher, ordering: [PlaceRelationOrder!], page: PageDelimitation, walk: WalkMatcher!): [WalkPlace!]!
+}
+
+type DeviceKind {
+  ancestors(filter: KindMatcher, ordering: [DeviceKindOrder!], page: PageDelimitation): [DeviceKind!]!
+  attr(did: String!): Attribute
+  attrs(dids: [String!]): [Attribute!]!
+  children(filter: KindMatcher, ordering: [DeviceKindOrder!], page: PageDelimitation): [DeviceKind!]!
+  codeName: String!
+  descendants(filter: KindMatcher, ordering: [DeviceKindOrder!], page: PageDelimitation): [DeviceKind!]!
+  devicesDirect(filter: InstancePatternMatcher, ordering: [DeviceOrder!], page: PageDelimitation): [Device!]!
+  devicesSetDirect(filter: InstancePatternMatcher): DevicesSet!
+  devicesSetTransitive(filter: InstancePatternMatcher): DevicesSet!
+  devicesTransitive(filter: InstancePatternMatcher, ordering: [DeviceOrder!], page: PageDelimitation): [Device!]!
+  intId: ID!
+  localization(language: ID!): Localization!
+  parent: DeviceKind
+  siblings(filter: KindMatcher, ordering: [DeviceKindOrder!], page: PageDelimitation): [DeviceKind!]!
+}
+
+type DeviceKindsSet {
+  count: Int!
+  devicesDirect(filter: InstancesSetPatternMatcher, ordering: [DeviceOrder!], page: PageDelimitation): [Device!]!
+  devicesSetDirect(filter: InstancesSetPatternMatcher): DevicesSet!
+  devicesSetTransitive(filter: InstancesSetPatternMatcher): DevicesSet!
+  devicesTransitive(filter: InstancesSetPatternMatcher, ordering: [DeviceOrder!], page: PageDelimitation): [Device!]!
+  items(ordering: [DeviceKindOrder!], page: PageDelimitation): [DeviceKind!]!
+}
+
+type DeviceTemplate {
+  intId: ID!
+}
+
+type DevicesBucketByAttribute {
+  attr: Attribute!
+  set: DevicesSet!
+}
+
+type DevicesBucketByKind {
+  kind: DeviceKind!
+  set: DevicesSet!
+}
+
+type DevicesSet {
+  attrsAvg(defaultValue: Float, did: String!): Float!
+  attrsSum(defaultValue: Float = 0.0, did: String!): Float!
+  count: Int!
+  "get Dios where any of the Devices in this set is Author"
+  diosAuthor(filter: AuthorDioFilter, time: TimeDelimitation): DiosSet
+  "get Dios where any of the Devices in this set is Mediator"
+  diosMediator(filter: MediatorDioFilter, time: TimeDelimitation): DiosSet
+  "get Dios where any of the Devices in this set is Object"
+  diosObject(filter: ObjectDioFilter, time: TimeDelimitation): DiosSet
+  distinctAttrValues(did: String!, maxResults: Int): [String!]!
+  distinctAttrs(maxResults: Int): [String!]!
+  groupByAttr(did: String!, includeMissing: Boolean = true): [DevicesBucketByAttribute]!
+  groupByKind: [DevicesBucketByKind]!
+  items(ordering: [DeviceOrder!], page: PageDelimitation): [Device!]!
+  kinds(filter: KindMatcher): DeviceKindsSet!
+  relDevice(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation, walk: WalkMatcher): [Device!]!
+  relDevicesSet(edge: EdgeMatcher, filter: InstancesSetPatternMatcher, walk: WalkMatcher): DevicesSet!
+  relPlace(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation, walk: WalkMatcher): [Place!]!
+  relPlacesSet(edge: EdgeMatcher, filter: InstancesSetPatternMatcher, walk: WalkMatcher): PlacesSet!
+}
+
+type Did {
+  id: ID!
+  topic: String
+}
+
+type Dio {
+  """
+
+  All references are nullable here because we reference objects living in external service over which we have no control.
+  It could happen that our pointer becomes invalid (e.g. author points at Device X which gets deleted from inventory)
+  and failure to resolve (non-nullable) pointer (author in this cse) would lead to nulling of the whole Dio (this is per spec graphql behavior).
+  With nullable references when the above case occurs the resulting Dio will simply have null in its author field.
+  As a special case mediators field which contain multiple pointers will contain one null per each unresolved reference.
+  """
+  author: Device
+  did: Did!
+  id: ID!
+  mediators: [Device]!
+  objectDevice: Device
+  objectPlace: Place
+  startIndexing: String!
+  tags: [Tag!]
+  taskExecution: TaskExecution
+  timestamp: String!
+  validity: Validity
+  value: Value
+}
+
+type DiosSet {
+  aggregations: Aggregations
+  authors: DevicesSet!
+  """
+
+  Number of Dio matching the query parameters.
+
+  Elasticsearch information about number of all matching documents (DiosSet).
+  It must not be equal to a number of retrived documnets.
+  The number of retrieved documents is influenced by PageDelimitation or Elasticsearch internall limit (10 000).
+  """
+  count: Int!
+  items(ordering: DioOrder, paging: PageDelimitation): [Dio!]!
+  mediators: [DevicesSet]!
+  objectsDevice: DevicesSet!
+  objectsPlace: PlacesSet!
+}
+
+type EdgeChannel {
+  attrs(dids: [String!]): [Attribute!]!
+  dir: Direction!
+  edgeEndPoint: Channel!
+  intId: ID!
+  type: String!
+}
+
+type EdgeDevice {
+  attr(did: String!): Attribute!
+  attrs(dids: [String!]): [Attribute!]!
+  dir: Direction!
+  edgeEndPoint: Device!
+  intId: ID!
+  type: String!
+  validFrom: Date
+  validTo: Date
+}
+
+type EdgeDeviceTemplate {
+  attr(did: String!): Attribute!
+  attrs(dids: [String!]): [Attribute!]!
+  dir: Direction!
+  edgeEndPoint: DeviceTemplate!
+  intId: ID!
+  type: String!
+  validFrom: Date
+  validTo: Date
+}
+
+type EdgePlace {
+  attr(did: String!): Attribute!
+  attrs(dids: [String!]): [Attribute!]!
+  dir: Direction!
+  edgeEndPoint: Place!
+  intId: ID!
+  type: String!
+  validFrom: Date
+  validTo: Date
+}
+
+type EdgePlaceTemplate {
+  attr(did: String!): Attribute!
+  attrs(dids: [String!]): [Attribute!]!
+  dir: Direction!
+  edgeEndPoint: PlaceTemplate!
+  intId: ID!
+  type: String!
+  validFrom: Date
+  validTo: Date
+}
+
+type ExtId {
+  did: String!
+  value: String!
+}
+
+type Language {
+  abbreviation: String!
+  deprecated: Boolean!
+  intId: ID!
+  name: String!
+}
+
+type Localization {
+  abbreviation: String
+  description(maxLength: Int): String
+  name(format: String): String!
+}
+
+type Place {
+  attr(did: String!): Attribute
+  attrs(dids: [String!]): [Attribute!]!
+  "get DiosSet where this Place is Object"
+  diosObject(filter: ObjectDioFilter, time: TimeDelimitation): DiosSet
+  edgeDevice(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation): [EdgeDevice!]!
+  edgePlace(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [PlaceRelationOrder!], page: PageDelimitation): [EdgePlace!]!
+  id: ExtId!
+  intId: ID!
+  kind: PlaceKind!
+  relDevice(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation, walk: WalkMatcher): [Device!]!
+  relDevicesSet(edge: EdgeMatcher, filter: InstancePatternMatcher, walk: WalkMatcher): DevicesSet!
+  relPlace(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [PlaceRelationOrder!], page: PageDelimitation, walk: WalkMatcher): [Place!]!
+  relPlacesSet(edge: EdgeMatcher, filter: InstancePatternMatcher, walk: WalkMatcher): PlacesSet!
+  template: PlaceTemplate!
+  walkDevice(filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation, walk: WalkMatcher!): [WalkDevice!]!
+  walkPlace(filter: InstancePatternMatcher, ordering: [PlaceRelationOrder!], page: PageDelimitation, walk: WalkMatcher!): [WalkPlace!]!
+}
+
+type PlaceKind {
+  ancestors(filter: KindMatcher, ordering: [PlaceKindOrder!], page: PageDelimitation): [PlaceKind!]!
+  attr(did: String!): Attribute!
+  attrs(dids: [String!]): [Attribute!]!
+  children(filter: KindMatcher, ordering: [PlaceKindOrder!], page: PageDelimitation): [PlaceKind!]!
+  codeName: String!
+  descendants(filter: KindMatcher, ordering: [PlaceKindOrder!], page: PageDelimitation): [PlaceKind!]!
+  intId: ID!
+  localization(language: ID!): Localization!
+  parent: PlaceKind
+  placesDirect(filter: InstancePatternMatcher, ordering: [PlaceOrder!], page: PageDelimitation): [Place!]!
+  placesSetDirect(filter: InstancePatternMatcher): PlacesSet!
+  placesSetTransitive(filter: InstancePatternMatcher): PlacesSet!
+  placesTransitive(filter: InstancePatternMatcher, ordering: [PlaceOrder!], page: PageDelimitation): [Place!]!
+  siblings(filter: KindMatcher, ordering: [PlaceKindOrder!], page: PageDelimitation): [PlaceKind!]!
+}
+
+type PlaceKindsSet {
+  count: Int!
+  items(ordering: [PlaceKindOrder!], page: PageDelimitation): [PlaceKind!]!
+  placesDirect(filter: InstancesSetPatternMatcher, ordering: [PlaceOrder!], page: PageDelimitation): [Place!]!
+  placesSetDirect(filter: InstancesSetPatternMatcher): PlacesSet!
+  placesSetTransitive(filter: InstancesSetPatternMatcher): PlacesSet!
+  placesTransitive(filter: InstancesSetPatternMatcher, ordering: [PlaceOrder!], page: PageDelimitation): [Place!]!
+}
+
+type PlaceTemplate {
+  attr(did: String!): Attribute
+  attrs(dids: [String!]!): [Attribute!]!
+  codeName: String!
+  intId: ID!
+  kind: PlaceKind!
+  localization(language: ID!): Localization!
+  places: [Place!]!
+}
+
+type PlacesBucketByAttribute {
+  attr: Attribute!
+  set: PlacesSet!
+}
+
+type PlacesBucketByKind {
+  kind: PlaceKind!
+  set: PlacesSet!
+}
+
+type PlacesSet {
+  attrsAvg(defaultValue: Float, did: String!): Float!
+  attrsSum(defaultValue: Float = 0.0, did: String!): Float!
+  count: Int!
+  "get Dios where any of the Devices in this set is Object"
+  diosObject(filter: ObjectDioFilter, time: TimeDelimitation): DiosSet
+  distinctAttrValues(did: String!, maxResults: Int): [String!]!
+  distinctAttrs(maxResults: Int): [String!]!
+  groupByAttr(did: String!, includeMissing: Boolean = true): [PlacesBucketByAttribute]!
+  groupByKind: [PlacesBucketByKind]!
+  items(ordering: [DeviceOrder!], page: PageDelimitation): [Place!]!
+  kinds(filter: KindMatcher): PlaceKindsSet!
+  relDevice(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation, walk: WalkMatcher): [Device!]!
+  relDevicesSet(edge: EdgeMatcher, filter: InstancesSetPatternMatcher, walk: WalkMatcher): DevicesSet!
+  relPlace(edge: EdgeMatcher, filter: InstancePatternMatcher, ordering: [DeviceRelationOrder!], page: PageDelimitation, walk: WalkMatcher): [Place!]!
+  relPlacesSet(edge: EdgeMatcher, filter: InstancesSetPatternMatcher, walk: WalkMatcher): PlacesSet!
+}
+
+type Principal {
+  name: String!
+  roles: [String!]!
+}
+
+type Query {
+  deviceKinds(filter: KindMatcher, ordering: [DeviceKindOrder!], page: PageDelimitation): [DeviceKind!]!
+  deviceKindsSet(filter: KindMatcher): DeviceKindsSet!
+  devices(filter: InstancePatternMatcher, ordering: [DeviceOrder!], page: PageDelimitation): [Device!]!
+  devicesSet(filter: InstancesSetPatternMatcher): DevicesSet!
+  dios(filter: DioFilter, time: TimeDelimitation): DiosSet
+  "!"
+  diosById(ids: [ID!]!): DiosSet
+  languages: [Language!]!
+  me: Principal!
+  placeKinds(filter: KindMatcher, ordering: [PlaceKindOrder!], page: PageDelimitation): [PlaceKind!]!
+  placeKindsSet(filter: KindMatcher): PlaceKindsSet!
+  places(filter: InstancePatternMatcher, ordering: [PlaceOrder!], page: PageDelimitation): [Place!]!
+  placesSet(filter: InstancesSetPatternMatcher): PlacesSet!
+}
+
+type RangeBucket {
+  count: Int!
+  diosSet: DiosSet!
+  from: Int!
+  to: Int!
+}
+
+type Tag {
+  key: String!
+  value: String!
+}
+
+type TaskExecution {
+  id: ID!
+  template: String
+}
+
+type Validity {
+  isDuplicity: Boolean!
+  isInvalid: Boolean!
+  validityErrors: [ValidityError!]
+}
+
+type ValidityError {
+  errorType: String!
+  msg: String!
+  validationType: String!
+}
+
+type Value {
+  certainty: Float
+  normalizedType: String
+  normalizedValue: JSON
+  raw: String!
+}
+
+type WalkDevice {
+  path: [EdgeDevice!]!
+  walkEndPoint: Device!
+}
+
+type WalkPlace {
+  path: [EdgePlace!]!
+  walkEndPoint: Place!
+}
+
+enum Direction {
+  IN
+  OUT
+}
+
+enum DirectionMatcher {
+  ANY
+  IN
+  OUT
+}
+
+enum Magnitude {
+  GREATER
+  LESS
+}
+
+enum Order {
+  ASCENDING
+  DESCENDING
+}
+
+enum OrderType {
+  ASCENDING
+  DESCENDING
+}
+
+enum RelationValidity {
+  ANY
+  DISJOINT
+  OVERLAPPING
+}
+
+"""
+
+TODO scalar Data
+TODO: pro moznosti jemnesiho grupovani podle casu mozna udelat objekt
+ktery repreznetuje hodnotu-Timeunit -> e.g.: pak lze treba grupovat po X-minutach, ..
+"""
+enum TimeUnit {
+  DAY
+  HOUR
+  "SECOND"
+  MINUTE
+  MONTH
+  WEEK
+  YEAR
+}
+
+input ArbitraryIntervals {
+  intervals: [SingleInterval!]!
+}
+
+input AttrKeyPresentMatcher {
+  did: String!
+}
+
+input AttrValueExactMatcher {
+  did: String!
+  value: [String!]!
+}
+
+input AttrValuePresentMatcher {
+  value: String!
+}
+
+"""
+
+Set filters or exactly 1 combinator (AND, OR, NOT).
+More filters available with implicit AND between them.
+"""
+input AuthorDioFilter {
+  AND: [AuthorDioFilter!]
+  NOT: AuthorDioFilter
+  OR: [AuthorDioFilter!]
+  didFilter: DidFilter
+  mediatorsFilter: MediatorsFilter
+  objectFilter: ObjectFilter
+  tagFilter: TagFilter
+  taskExecutionFilter: TaskExecutionFilter
+  validityFilter: ValidityFilter
+  valueFilter: ValueFilter
+}
+
+"Implicit AND between filters is supported."
+input AuthorFilter {
+  ids: [ID!]
+  "tohle jde na Catalog"
+  kinds: [String!]
+}
+
+"Exactly one filter must be given."
+input BlobFilter {
+  equals: String
+  isNull: Void
+}
+
+"Exactly one filter must be given."
+input BoolFilter {
+  equals: Boolean
+  isNull: Void
+}
+
+"Exactly one filter must be given."
+input DateFilter {
+  after: DateTime
+  before: DateTime
+  equals: DateTime
+  isNull: Void
+}
+
+input DeviceKindOrder {
+  attr: String
+  name: Void
+  order: Order = ASCENDING
+}
+
+input DeviceOrder {
+  attr: String
+  id: Void
+  intId: Void
+  order: Order = ASCENDING
+}
+
+input DeviceRelationOrder {
+  attr: String
+  edgeAttr: String
+  edgeType: Void
+  id: Void
+  intId: Void
+  order: Order = ASCENDING
+  validity: Void
+}
+
+input DeviceTemplateOrder {
+  attr: String
+  id: Void
+  intId: Void
+  name: Void
+  order: Order = ASCENDING
+}
+
+input DeviceTemplateRelationOrder {
+  attr: String
+  edgeAttr: String
+  edgeType: Void
+  id: Void
+  intId: Void
+  name: Void
+  order: Order = ASCENDING
+  validity: Void
+}
+
+"Implicit AND between filters is supported."
+input DidFilter {
+  ids: [ID!]
+  "tohle jde na Catalog"
+  topicExact: String
+  topicSubtype: String
+}
+
+"""
+
+Set filters or exactly 1 combinator (AND, OR, NOT).
+More filters available with implicit AND between them.
+"""
+input DioFilter {
+  AND: [DioFilter!]
+  NOT: DioFilter
+  OR: [DioFilter!]
+  authorFilter: AuthorFilter
+  "set filters (excplicite AND) or exactly 1 combinator (AND, OR, NOT)"
+  didFilter: DidFilter
+  mediatorsFilter: MediatorsFilter
+  objectFilter: ObjectFilter
+  tagFilter: TagFilter
+  taskExecutionFilter: TaskExecutionFilter
+  validityFilter: ValidityFilter
+  valueFilter: ValueFilter
+}
+
+input DioOrder {
+  byField: String!
+  order: OrderType = ASCENDING
+}
+
+input EdgeFollowMatcher {
+  edge: EdgeMatcher
+  maxDepth: Int
+}
+
+input EdgeMatcher {
+  AND: [EdgeMatcher!]
+  NOT: EdgeMatcher
+  OR: [EdgeMatcher!]
+  attrExists: AttrKeyPresentMatcher
+  attrValue: AttrValueExactMatcher
+  attrValueExists: AttrValuePresentMatcher
+  direction: DirectionMatcher
+  intId: [ID!]
+  type: String
+  validAfter: Date
+  validAt: Date
+  validBefore: Date
+}
+
+input ExtIDMatcher {
+  did: String!
+  values: [String!]!
+}
+
+input InstanceMatcher {
+  AND: [InstanceMatcher!]
+  NOT: InstanceMatcher
+  OR: [InstanceMatcher!]
+  attrExists: AttrKeyPresentMatcher
+  attrValue: AttrValueExactMatcher
+  attrValueExists: AttrValuePresentMatcher
+  id: ExtIDMatcher
+  intId: [ID!]
+  kind: KindMatcher
+  kindName: [String!]
+  kindNameFuzzy: String
+  validAfter: Date
+  validAt: Date
+  validBefore: Date
+}
+
+input InstancePatternMatcher {
+  AND: [InstancePatternMatcher!]
+  NOT: InstancePatternMatcher
+  OR: [InstancePatternMatcher!]
+  node: InstanceMatcher
+  rels: RelationMatcher
+  relsSet: SetRelationMatcher
+}
+
+input InstancesSetPatternMatcher {
+  AND: [InstancesSetPatternMatcher!]
+  NOT: InstancesSetPatternMatcher
+  OR: [InstancesSetPatternMatcher!]
+  node: InstanceMatcher
+  rels: RelationMatcher
+  relsSet: SetRelationMatcher
+  set: SetMatcher
+}
+
+"Exactly one filter must be given."
+input IntegerFilter {
+  equals: Int
+  higher: Int
+  higherOrEqual: Int
+  isNull: Void
+  lower: Int
+  lowerOrEqual: Int
+}
+
+"Exactly one filter must be given."
+input JsonFilter {
+  "TODO typy?"
+  contains: JSON
+  containsKey: String
+  containsValue: JsonValueFilter
+  equals: JSON
+  isNull: Void
+}
+
+"Exactly one filter must be given."
+input JsonValueFilter {
+  key: String!
+  value: String!
+}
+
+"Exactly one filter must be given."
+input KeywordFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  isNull: Void
+  startsWith: String
+}
+
+input KindMatcher {
+  AND: [KindMatcher!]
+  NOT: KindMatcher
+  OR: [KindMatcher!]
+  attrExists: AttrKeyPresentMatcher
+  attrValue: AttrValueExactMatcher
+  attrValueExists: AttrValuePresentMatcher
+  name: [String!]
+  nameFuzzy: String
+}
+
+input KindPatternMatcher {
+  AND: [KindPatternMatcher!]
+  NOT: KindPatternMatcher
+  OR: [KindPatternMatcher!]
+  node: KindMatcher
+  rels: RelationMatcher
+  relsSet: SetRelationMatcher
+}
+
+"""
+
+Set filters or exactly 1 combinator (AND, OR, NOT).
+More filters available with implicit AND between them.
+"""
+input MediatorDioFilter {
+  AND: [MediatorDioFilter!]
+  NOT: MediatorDioFilter
+  OR: [MediatorDioFilter!]
+  authorFilter: AuthorFilter
+  didFilter: DidFilter
+  objectFilter: ObjectFilter
+  tagFilter: TagFilter
+  taskExecutionFilter: TaskExecutionFilter
+  validityFilter: ValidityFilter
+  valueFilter: ValueFilter
+}
+
+"Implicit AND between filters is supported."
+input MediatorsFilter {
+  coreElements: [String!]
+  ids: [ID!]
+  kinds: [String!]
+}
+
+"""
+
+Set filters or exactly 1 combinator (AND, OR, NOT).
+More filters available with implicit AND between them.
+"""
+input ObjectDioFilter {
+  AND: [ObjectDioFilter!]
+  NOT: ObjectDioFilter
+  OR: [ObjectDioFilter!]
+  authorFilter: AuthorFilter
+  didFilter: DidFilter
+  mediatorsFilter: MediatorsFilter
+  tagFilter: TagFilter
+  taskExecutionFilter: TaskExecutionFilter
+  validityFilter: ValidityFilter
+  valueFilter: ValueFilter
+}
+
+"Implicit AND between filters is supported."
+input ObjectFilter {
+  ids: [ID!]
+  "tohle jde na Catalog"
+  kinds: [String!]
+}
+
+input PageDelimitation {
+  offset: Int
+  size: Int!
+}
+
+input PathPartMatcher {
+  follow: EdgeFollowMatcher
+  step: EdgeMatcher
+}
+
+input PeriodicIntervals {
+  count: Int
+  from: DateTime!
+  period: TimeUnit!
+  to: DateTime
+}
+
+input PlaceKindOrder {
+  attr: String
+  name: Void
+  order: Order = ASCENDING
+}
+
+input PlaceOrder {
+  attr: String
+  id: Void
+  intId: Void
+  order: Order = ASCENDING
+}
+
+input PlaceRelationOrder {
+  attr: String
+  edgeAttr: String
+  edgeType: Void
+  id: Void
+  intId: Void
+  order: Order = ASCENDING
+  validity: Void
+}
+
+input PlaceTemplateOrder {
+  attr: String
+  id: Void
+  intId: Void
+  name: Void
+  order: Order = ASCENDING
+}
+
+input PlaceTemplateRelationOrder {
+  attr: String
+  edgeAttr: String
+  edgeType: Void
+  id: Void
+  intId: Void
+  name: Void
+  order: Order = ASCENDING
+  validity: Void
+}
+
+"Exactly one filter must be given."
+input RealFilter {
+  equals: Float
+  higher: Float
+  higherOrEqual: Float
+  isNull: Void
+  lower: Float
+  lowerOrEqual: Float
+}
+
+input RelationMatcher {
+  AND: [RelationMatcher!]
+  NOT: RelationMatcher
+  OR: [RelationMatcher!]
+  toDevice: SingularInstancePatternMatcher
+  toPlace: SingularInstancePatternMatcher
+  traversal: TraversalMatcher
+  validities: RelationValidity = ANY
+}
+
+input SetMatcher {
+  AND: [SetMatcher!]
+  NOT: SetMatcher
+  OR: [SetMatcher!]
+  sizeEq: Int
+  sizeGt: Int
+  sizeGte: Int
+  sizeLt: Int
+  sizeLte: Int
+}
+
+input SetRelationMatcher {
+  AND: [SetRelationMatcher!]
+  NOT: SetRelationMatcher
+  OR: [SetRelationMatcher!]
+  toDevicesSet: SingularInstancesSetPatternMatcher
+  toPlacesSet: SingularInstancesSetPatternMatcher
+  traversal: TraversalMatcher
+  validities: RelationValidity = ANY
+}
+
+input SingleInterval {
+  from: DateTime!
+  to: DateTime!
+}
+
+input SingularInstancePatternMatcher {
+  node: InstanceMatcher
+  rels: RelationMatcher
+  relsSet: SetRelationMatcher
+}
+
+input SingularInstancesSetPatternMatcher {
+  node: InstanceMatcher
+  rels: RelationMatcher
+  relsSet: SetRelationMatcher
+  set: SetMatcher
+}
+
+"More filters available with implicit AND between them."
+input TagFilter {
+  key: KeywordFilter
+  value: KeywordFilter
+}
+
+"Implicit AND between filters is supported."
+input TaskExecutionFilter {
+  id: ID
+  template: String
+}
+
+"Exactly one filter must be given."
+input TextFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  isNull: Void
+  match: String
+  startsWith: String
+}
+
+"""
+
+Exactly one filter must be given.
+DateTime supports the following formats:
+- UTC,    e.g.: 2018-01-20T00:00:00.000Z
+- Offset, e.g.: 2018-01-20T00:00:00-00:00
+both examples will result into the same date time '2018-01-20T00:00Z[UTC]'
+
+IMPORTANT: Only SingleInterval is supported so far.
+"""
+input TimeDelimitation {
+  arbitrary: ArbitraryIntervals
+  periodic: PeriodicIntervals
+  single: SingleInterval
+}
+
+"either `edge` or `walk` must be given"
+input TraversalMatcher {
+  AND: [TraversalMatcher!]
+  NOT: TraversalMatcher
+  OR: [TraversalMatcher!]
+  edge: EdgeMatcher
+  walk: WalkMatcher
+}
+
+"Implicit AND between filters is supported."
+input ValidityFilter {
+  isDuplicity: Boolean
+  isInvalid: Boolean
+}
+
+"Exactly one filter must be given."
+input ValueFilter {
+  blob: BlobFilter
+  integer: IntegerFilter
+  json: JsonFilter
+  keyword: KeywordFilter
+  logic: BoolFilter
+  "TODO RawFilter, RegexOnAllFieldFilter"
+  raw: TextFilter
+  real: RealFilter
+  text: TextFilter
+  timestamp: DateFilter
+}
+
+input WalkMatcher {
+  path: [PathPartMatcher!]!
+}
+
+
+scalar Cursor
+
+scalar Void
+
+scalar Date
+
+scalar DateTime
+
+scalar JSON

@@ -1,0 +1,4 @@
+---
+- include_tasks: "01-pre_install.yml"
+- include_tasks: "02-install.yml"
+#- include_tasks: "03-post_install.yml"

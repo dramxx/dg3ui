@@ -1,0 +1,16 @@
+{
+  "name": "Catalog GraphQL",
+  "schemaPath": "schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "http://172.22.16.212:4001/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL",
+          "Accept-Language": "cs"
+        },
+        "introspect": true
+      }
+    }
+  }
+}

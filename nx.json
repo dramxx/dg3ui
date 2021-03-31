@@ -1,0 +1,126 @@
+{
+  "npmScope": "dg3",
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "components": {
+      "tags": []
+    },
+    "types": {
+      "tags": []
+    },
+    "server": {
+      "tags": []
+    },
+    "workbench": {
+      "tags": []
+    },
+    "graphql": {
+      "tags": []
+    },
+    "utils": {
+      "tags": []
+    },
+    "time-filter": {
+      "tags": []
+    },
+    "user-settings": {
+      "tags": []
+    },
+    "charts": {
+      "tags": []
+    },
+    "filter-create-dialog": {
+      "tags": []
+    },
+    "app-menu": {
+      "tags": []
+    },
+    "report": {
+      "tags": []
+    },
+    "map": {
+      "tags": []
+    },
+    "top-bar": {
+      "tags": []
+    },
+    "graph-visualization": {
+      "tags": []
+    },
+    "schema": {
+      "tags": []
+    },
+    "graphiql": {
+      "tags": []
+    },
+    "icons": {
+      "tags": []
+    },
+    "reports-window": {
+      "tags": []
+    },
+    "app-logo": {
+      "tags": []
+    },
+    "pages": {
+      "tags": []
+    },
+    "endpoints": {
+      "tags": []
+    },
+    "vga-importer": {
+      "tags": []
+    },
+    "vga": {
+      "tags": []
+    },
+    "table": {
+      "tags": []
+    },
+    "report-playground": {
+      "tags": []
+    },
+    "dcamm": {
+      "tags": []
+    },
+    "unity-player": {
+      "tags": []
+    },
+    "import-sort": {
+      "tags": []
+    },
+    "detail": {
+      "tags": []
+    },
+    "saved-filters-window": {
+      "tags": []
+    },
+    "import-unsap-dialog": {
+      "tags": []
+    },
+    "import-template-dialog": {
+      "tags": []
+    },
+    "adhoc-task-dialog": {
+      "tags": []
+    },
+    "clear-filter-button": {
+      "tags": []
+    },
+    "exported-files-window": {
+      "tags": []
+    },
+    "export-dialog": {
+      "tags": []
+    },
+    "inspector": {
+      "tags": []
+    }
+  }
+}
